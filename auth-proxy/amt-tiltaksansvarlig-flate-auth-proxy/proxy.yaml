@@ -1,0 +1,74 @@
+kind: Application
+apiVersion: nais.io/v1alpha1
+metadata:
+  name: amt-tiltaksansvarlig-flate-auth-proxy
+  namespace: amt
+  labels:
+    team: amt
+spec:
+  image: ghcr.io/navikt/poao-auth-proxy/poao-auth-proxy:2021.09.07_06.22-b55769774975
+  ingresses:
+    - https://amt-tiltaksansvarlig-flate-auth-proxy.dev.intern.nav.no
+  port: 8080
+  prometheus:
+    enabled: false
+  liveness:
+    path: /internal/alive
+    initialDelay: 15
+  readiness:
+    path: /internal/ready
+    initialDelay: 15
+  replicas:
+    min: 1
+    max: 1
+    cpuThresholdPercentage: 90
+  resources:
+    limits:
+      cpu: "1"
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  azure:
+    application:
+      enabled: true
+      tenant: nav.no
+      claims:
+        groups:
+          - id: "0a84d77e-c8e9-4173-96af-164eb7fbb749" # amt
+  accessPolicy:
+    inbound:
+      rules:
+        - application: amt-tiltaksansvarlig-flate
+    outbound:
+      rules:
+        - application: amt-tiltak
+        - application: amt-tiltaksansvarlig-flate-auth-proxy-redis
+  envFrom:
+    - secret: amt-tiltaksansvarlig-flate-auth-proxy-redis-secret
+    - secret: amt-tiltaksansvarlig-flate-auth-proxy-secret
+  env:
+    - name: APPLICATION_URL
+      value: https://amt-tiltaksansvarlig-flate-auth-proxy.dev.intern.nav.no
+    - name: AUTH_LOGIN_PROVIDER
+      value: AZURE_AD
+    - name: SESSION_STORAGE_STORE_TYPE
+      value: REDIS
+    - name: SESSION_STORAGE_REDIS_HOST
+      value: amt-tiltaksansvarlig-flate-auth-proxy-redis
+    - name: SESSION_STORAGE_REDIS_PASSWORD
+      value: env:REDIS_PASSWORD
+    - name: SESSION_COOKIE_DOMAIN
+      value: nav.no
+    - name: JSON_CONFIG
+      value: >
+        {
+          "proxy": {
+            "proxies": [
+              { 
+                "fromPath": "/amt-tiltak", "toUrl": "http://amt-tiltak", 
+                "toApp": { "name": "amt-tiltak", "namespace": "amt", "cluster": "dev-gcp" } 
+              }
+            ]
+          }
+        }
