@@ -46,25 +46,31 @@ spec:
         {
           "topics": [
             {
-              "name": "amt.test-arena-tiltak",
+              "name": "teamarenanais.aapen-arena-tiltakdeltakerendret-v1-q2",
               "location": "AIVEN",
               "keyDeserializerType": "STRING",
               "valueDeserializerType": "STRING"
             },
             {
-              "name": "amt.test-arena-tiltaksgruppe",
+              "name": "teamarenanais.aapen-arena-tiltakendret-v1-q2",
               "location": "AIVEN",
               "keyDeserializerType": "STRING",
               "valueDeserializerType": "STRING"
             },
             {
-              "name": "amt.test-arena-tiltaksgjennomforing",
+              "name": "teamarenanais.aapen-arena-tiltakgjennomforingendret-v1-q2",
               "location": "AIVEN",
               "keyDeserializerType": "STRING",
               "valueDeserializerType": "STRING"
             },
             {
-              "name": "amt.test-arena-tiltakdeltaker",
+              "name": "teamarenanais.aapen-arena-tiltaksgruppeendret-v1-q2",
+              "location": "AIVEN",
+              "keyDeserializerType": "STRING",
+              "valueDeserializerType": "STRING"
+            },
+            {
+              "name": "teamarenanais.aapen-arena-avtaleinfoendret-v1-q2",
               "location": "AIVEN",
               "keyDeserializerType": "STRING",
               "valueDeserializerType": "STRING"

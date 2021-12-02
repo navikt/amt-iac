@@ -6,7 +6,7 @@ metadata:
   labels:
     team: amt
 spec:
-  image: ghcr.io/navikt/poao-auth-proxy/poao-auth-proxy:2021.09.07_06.22-b55769774975
+  image: ghcr.io/navikt/poao-auth-proxy/poao-auth-proxy:2021.11.24_12.11-9b8edc393931
   ingresses:
     - https://amt-tiltaksarrangor-flate-auth-proxy.dev.intern.nav.no
   port: 8080
@@ -31,6 +31,8 @@ spec:
       memory: 128Mi
   idporten:
     enabled: true
+    sidecar:
+      enabled: true
   tokenx:
     enabled: true
   accessPolicy:
@@ -52,7 +54,7 @@ spec:
     - name: SESSION_STORAGE_STORE_TYPE
       value: REDIS
     - name: SESSION_STORAGE_REDIS_HOST
-      value: amt-tiltaksarrangor-flate-auth-proxy-redis
+      value: amt-tiltaksarrangor-flate-auth-proxy-redis.amt.svc.cluster.local
     - name: SESSION_STORAGE_REDIS_PASSWORD
       value: env:REDIS_PASSWORD
     - name: SESSION_COOKIE_DOMAIN

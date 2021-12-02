@@ -36,6 +36,9 @@ spec:
       claims:
         groups:
           - id: "0a84d77e-c8e9-4173-96af-164eb7fbb749" # amt
+      replyURLs:
+        - "http://localhost/oauth2/callback"
+        - "https://amt-tiltaksansvarlig-flate-auth-proxy.dev.intern.nav.no/oauth2/callback"
   accessPolicy:
     inbound:
       rules:
