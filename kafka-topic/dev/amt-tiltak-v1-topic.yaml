@@ -20,3 +20,6 @@ spec:
     - team: amt
       application: amt-tiltak
       access: read
+    - team: amt
+      application: amt-kafka-manager
+      access: read
