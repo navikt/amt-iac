@@ -5,6 +5,8 @@ metadata:
   namespace: amt
   labels:
     team: amt
+  annotations:
+    kafka.nais.io/removeDataWhenResourceIsDeleted: "true"
 spec:
   pool: nav-dev
   config:
