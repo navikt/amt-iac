@@ -76,6 +76,12 @@ spec:
               "valueDeserializerType": "STRING"
             },
             {
+              "name": "teamarenanais.aapen-arena-tiltakssakendret-v1-q2",
+              "location": "AIVEN",
+              "keyDeserializerType": "STRING",
+              "valueDeserializerType": "STRING"
+            },
+            {
               "name": "amt.amt-tiltak-v1",
               "location": "AIVEN",
               "keyDeserializerType": "STRING",
