@@ -6,7 +6,7 @@ metadata:
   labels:
     team: amt
 spec:
-  image: ghcr.io/navikt/kafka-manager/kafka-manager:2.2022.01.13_14.52-999e3c414924
+  image: ghcr.io/navikt/kafka-manager/kafka-manager:2.2022.06.28_10.32-8669b1a0d98c
   port: 8080
   webproxy: true
   ingresses:
@@ -56,6 +56,12 @@ spec:
                "location": "AIVEN",
                "keyDeserializerType": "STRING",
                "valueDeserializerType": "STRING"
-             }
+            },
+            {
+               "name": "teamarenanais.aapen-arena-tiltakssakendret-v1-p",
+               "location": "AIVEN",
+               "keyDeserializerType": "STRING",
+               "valueDeserializerType": "STRING"
+            }
           ]
         }
