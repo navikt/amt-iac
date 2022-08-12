@@ -62,6 +62,18 @@ spec:
                "location": "AIVEN",
                "keyDeserializerType": "STRING",
                "valueDeserializerType": "STRING"
+            },
+            {
+               "name": "teamarenanais.aapen-arena-tiltakdeltakerendret-v1-p",
+               "location": "AIVEN",
+               "keyDeserializerType": "STRING",
+               "valueDeserializerType": "STRING"
+            },
+            {
+               "name": "teamarenanais.aapen-arena-tiltakgjennomforingendret-v1-p",
+               "location": "AIVEN",
+               "keyDeserializerType": "STRING",
+               "valueDeserializerType": "STRING"
             }
           ]
         }
