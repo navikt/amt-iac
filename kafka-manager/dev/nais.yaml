@@ -89,12 +89,6 @@ spec:
               "valueDeserializerType": "STRING"
             },
             {
-               "name": "amt.nav-enhet-v1",
-               "location": "AIVEN",
-               "keyDeserializerType": "STRING",
-               "valueDeserializerType": "STRING"
-            },
-            {
                "name": "teamarenanais.aapen-arena-sakendret-v1-q2",
                "location": "AIVEN",
                "keyDeserializerType": "STRING",

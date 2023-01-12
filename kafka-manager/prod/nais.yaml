@@ -52,12 +52,6 @@ spec:
               "valueDeserializerType": "STRING"
             },
             {
-               "name": "amt.nav-enhet-v1",
-               "location": "AIVEN",
-               "keyDeserializerType": "STRING",
-               "valueDeserializerType": "STRING"
-            },
-            {
                "name": "teamarenanais.aapen-arena-tiltakssakendret-v1-p",
                "location": "AIVEN",
                "keyDeserializerType": "STRING",
