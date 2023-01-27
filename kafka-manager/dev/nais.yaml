@@ -89,6 +89,12 @@ spec:
               "valueDeserializerType": "STRING"
             },
             {
+              "name": "amt.deltaker-v1",
+              "location": "AIVEN",
+              "keyDeserializerType": "STRING",
+              "valueDeserializerType": "STRING"
+            },
+            {
                "name": "teamarenanais.aapen-arena-sakendret-v1-q2",
                "location": "AIVEN",
                "keyDeserializerType": "STRING",
