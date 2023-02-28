@@ -22,3 +22,9 @@ spec:
     - team: teamoppfolging
       application: dvh-arb-tiltak-deltakerliste-konsument
       access: read
+    - team: team-mulighetsrommet
+      application: mulighetsrommet-api
+      access: read
+    - team: team-mulighetsrommet
+      application: mulighetsrommet-kafka-manager
+      access: read
