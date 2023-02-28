@@ -20,5 +20,5 @@ spec:
       application: amt-kafka-manager
       access: read
     - team: teamoppfolging
-      application: dvh_arb_tiltak-deltakerliste-konsument
+      application: dvh-arb-tiltak-deltakerliste-konsument
       access: read
