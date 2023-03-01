@@ -20,7 +20,7 @@ spec:
       application: amt-kafka-manager
       access: read
     - team: teamoppfolging
-      application: dvh-arb-tiltak-deltakerliste-konsument
+      application: dvh-arb-tiltak-deltaker-konsument
       access: read
     - team: team-mulighetsrommet
       application: mulighetsrommet-api
