@@ -28,3 +28,6 @@ spec:
     - team: team-mulighetsrommet
       application: mulighetsrommet-kafka-manager
       access: read
+    - team: teamoppfolging
+      application: teamoppfolging-kafka
+      access: read
