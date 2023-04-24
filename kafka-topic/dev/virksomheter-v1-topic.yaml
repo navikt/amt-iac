@@ -25,3 +25,4 @@ spec:
     - team: amt
       application: amt-enhetsregister
       access: write
+#
