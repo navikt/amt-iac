@@ -20,7 +20,7 @@ spec:
       access: write
     - team: amt
       application: amt-arrangor
-      access: write
+      access: readwrite
     - team: amt
       application: amt-kafka-manager
       access: read
