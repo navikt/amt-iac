@@ -141,6 +141,12 @@ spec:
                "location": "AIVEN",
                "keyDeserializerType": "STRING",
                "valueDeserializerType": "STRING"
+            },
+            {
+               "name": "amt.nav-bruker-v1",
+               "location": "AIVEN",
+               "keyDeserializerType": "STRING",
+               "valueDeserializerType": "STRING"
             }
           ]
         }
