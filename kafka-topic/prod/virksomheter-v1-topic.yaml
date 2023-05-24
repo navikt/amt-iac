@@ -23,3 +23,9 @@ spec:
     - team: amt
       application: amt-enhetsregister
       access: write
+    - team: team-mulighetsrommet
+      application: mulighetsrommet-kafka-manager
+      access: read
+    - team: team-mulighetsrommet
+      application: mulighetsrommet-api
+      access: read
