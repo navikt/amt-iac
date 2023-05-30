@@ -24,6 +24,9 @@ spec:
     - team: amt
       application: amt-tiltaksarrangor-bff
       access: read
+    - team: amt
+      application: amt-person-service
+      access: read
     - team: teamoppfolging
       application: dvh-arb-tiltak-deltaker-konsument
       access: read
