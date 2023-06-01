@@ -1,7 +1,7 @@
 apiVersion: kafka.nais.io/v1
 kind: Topic
 metadata:
-  name: nav-bruker-v1
+  name: nav-bruker-personalia-v1
   namespace: amt
   labels:
     team: amt
