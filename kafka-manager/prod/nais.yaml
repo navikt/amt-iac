@@ -94,13 +94,13 @@ spec:
               "valueDeserializerType": "STRING"
             },
             {
-              "name": "amt.amt-arrangor-ansatt-v1",
+              "name": "amt.arrangor-ansatt-v1",
               "location": "AIVEN",
               "keyDeserializerType": "STRING",
               "valueDeserializerType": "STRING"
             },
             {
-              "name": "amt.amt-arrangor-v1",
+              "name": "amt.arrangor-v1",
               "location": "AIVEN",
               "keyDeserializerType": "STRING",
               "valueDeserializerType": "STRING"
