@@ -36,3 +36,6 @@ spec:
     - team: team-mulighetsrommet
       application: mulighetsrommet-kafka-manager
       access: read
+    - team: amt
+      application: amt-aktivitetskort-publisher
+      access: read
