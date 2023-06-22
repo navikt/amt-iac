@@ -24,3 +24,6 @@ spec:
     - team: amt
       application: amt-tiltaksarrangor-bff
       access: read
+    - team: amt
+      application: amt-aktivitetskort-publisher
+      access: read
