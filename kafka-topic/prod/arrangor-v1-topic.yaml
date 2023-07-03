@@ -17,7 +17,7 @@ spec:
   acl:
     - team: amt
       application: amt-tiltak
-      access: write
+      access: readwrite
     - team: amt
       application: amt-arrangor
       access: readwrite
