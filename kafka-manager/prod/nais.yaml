@@ -122,6 +122,18 @@ spec:
                "location": "AIVEN",
                "keyDeserializerType": "STRING",
                "valueDeserializerType": "STRING"
+            },
+            {
+               "name": "amt.nav-ansatt-personalia-v1",
+               "location": "AIVEN",
+               "keyDeserializerType": "STRING",
+               "valueDeserializerType": "STRING"
+            },
+            {
+               "name": "amt.arrangor-ansatt-personalia-v1",
+               "location": "AIVEN",
+               "keyDeserializerType": "STRING",
+               "valueDeserializerType": "STRING"
             }
           ]
         }
