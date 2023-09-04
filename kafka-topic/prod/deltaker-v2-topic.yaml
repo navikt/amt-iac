@@ -39,3 +39,6 @@ spec:
     - team: amt
       application: amt-arrangor
       access: read
+    - team: amt
+      application: amt-person-service
+      access: read  
