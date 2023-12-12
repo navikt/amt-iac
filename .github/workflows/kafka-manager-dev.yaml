@@ -1,8 +1,5 @@
 name: Deploy kafka-manager to dev
-on:
-  push:
-    paths:
-      - "kafka-manager/dev/*.yaml"
+on: push
 
 jobs:
   deploy-dev:
