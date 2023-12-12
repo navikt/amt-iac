@@ -1,11 +1,14 @@
 name: Deploy kafka-manager to dev
-on: push
+on:
+  push:
+    paths:
+      - "kafka-manager/dev/*.yaml"
 
 jobs:
   deploy-dev:
     name: Deploy kafka-manager to dev
     runs-on: ubuntu-latest
-    #if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
         uses: actions/checkout@v1
