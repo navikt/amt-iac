@@ -37,3 +37,6 @@ spec:
     - team: teamoppfolging
       application: teamoppfolging-kafka-manager
       access: read
+    - team: tpts
+      application: tiltakspenger-tiltak
+      access: read
