@@ -113,6 +113,12 @@ spec:
                "valueDeserializerType": "STRING"
             },
             {
+               "name": "team-mulighetsrommet.siste-tiltakstyper-v2",
+               "location": "AIVEN",
+               "keyDeserializerType": "STRING",
+               "valueDeserializerType": "STRING"
+            },
+            {
                "name": "amt.nav-bruker-personalia-v1",
                "location": "AIVEN",
                "keyDeserializerType": "STRING",
