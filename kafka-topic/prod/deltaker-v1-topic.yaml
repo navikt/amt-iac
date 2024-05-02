@@ -38,3 +38,6 @@ spec:
     - team: tpts
       application: tiltakspenger-tiltak
       access: read
+    - team: teamarenanais
+      application: arena-tiltakshendelse
+      access: read
