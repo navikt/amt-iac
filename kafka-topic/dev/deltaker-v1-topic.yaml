@@ -58,3 +58,6 @@ spec:
     - team: teamarenanais
       application: arena-tiltakshendelse-u3
       access: read
+    - team: team-mulighetsrommet
+      application: tiltakshistorikk
+      access: read

@@ -41,3 +41,6 @@ spec:
     - team: teamarenanais
       application: arena-tiltakshendelse
       access: read
+    - team: team-mulighetsrommet
+      application: tiltakshistorikk
+      access: read
