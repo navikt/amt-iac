@@ -38,4 +38,4 @@ spec:
       access: read
     - team: amt
       application: amt-deltaker
-      access: write
+      access: readwrite
