@@ -71,6 +71,12 @@ spec:
                "valueDeserializerType": "STRING"
             },
             {
+              "name": "teamarenanais.aapen-arena-histtiltakdeltakerendret-v1-p",
+              "location": "AIVEN",
+              "keyDeserializerType": "STRING",
+              "valueDeserializerType": "STRING"
+            },
+            {
                "name": "amt.virksomheter-v1",
                "location": "AIVEN",
                "keyDeserializerType": "STRING",
