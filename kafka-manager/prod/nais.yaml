@@ -153,6 +153,12 @@ spec:
                "location": "AIVEN",
                "keyDeserializerType": "STRING",
                "valueDeserializerType": "STRING"
+            },
+            {
+               "name": "amt.deltaker-hendelse-v1",
+               "location": "AIVEN",
+               "keyDeserializerType": "STRING",
+               "valueDeserializerType": "STRING"
             }
           ]
         }
