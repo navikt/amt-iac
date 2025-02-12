@@ -40,9 +40,6 @@ spec:
     - team: teamoppfolging
       application: teamoppfolging-kafka-manager
       access: read
-    - team: tpts
-      application: tiltakspenger-tiltak
-      access: read
     - team: teamarenanais
       application: arena-tiltakshendelse-q1
       access: read
@@ -63,4 +60,7 @@ spec:
       access: read
     - team: team-mulighetsrommet
       application: tiltakshistorikk
+      access: read
+    - team: tpts
+      application: tiltakspenger-saksbehandling-api
       access: read
