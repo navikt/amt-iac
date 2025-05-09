@@ -6,7 +6,7 @@ metadata:
   labels:
     team: amt
 spec:
-  image: europe-north1-docker.pkg.dev/nais-management-233d/poao/kafka-manager:2024.10.25-13.23-52ea038
+  image: europe-north1-docker.pkg.dev/nais-management-233d/poao/kafka-manager:2025.03.27-09.51-fae135c
   port: 8080
   webproxy: true
   ingresses:
@@ -119,7 +119,7 @@ spec:
                "valueDeserializerType": "STRING"
             },
             {
-               "name": "team-mulighetsrommet.siste-tiltakstyper-v2",
+               "name": "team-mulighetsrommet.siste-tiltakstyper-v3",
                "location": "AIVEN",
                "keyDeserializerType": "STRING",
                "valueDeserializerType": "STRING"
