@@ -20,6 +20,9 @@ spec:
       application: amt-deltaker
       access: write
     - team: amt
+      application: amt-deltaker-bff
+      access: read
+    - team: amt
       application: amt-distribusjon
       access: read
     - team: amt
