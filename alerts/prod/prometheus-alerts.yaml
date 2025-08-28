@@ -54,7 +54,7 @@ spec:
 
         # Sjekk Kafka consumer lag
         - alert: KafkaConsumerLag
-          expr: (100 * sum by(group) rate(kafka_consumergroup_group_lag{topic=~"amt-.*|arrangor-.*|deltaker.*|nav-.*|tiltakskoordinators-.*|virksomheter-.*|endringsmelding-v1", group=~"amt\\..*", client_id!="unknown"}[3m]))) > 10
+          expr: (100 * sum by (group) (rate(kafka_consumergroup_group_lag{topic=~"amt-.*|arrangor-.*|deltaker.*|nav-.*|tiltakskoordinators-.*|virksomheter-.*|endringsmelding-v1", group=~"amt\\..*", client_id!="unknown"}[3m]))) > 10
           for: 5m
           annotations:
             title: 'Konsumenten `{{ $labels.group }}` har treghet i mottak av Kafka-meldinger'
@@ -65,6 +65,7 @@ spec:
             namespace: amt
             severity: warning
             alert_type: custom
+
 
 
 
