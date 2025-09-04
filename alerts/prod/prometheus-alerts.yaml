@@ -17,7 +17,7 @@ spec:
           annotations:
             title: 'Applikasjonen `{{ $labels.app }}` logger mye feil'
             summary: 'Det er blitt logger mye feil i det siste fra applikasjonen `{{ $labels.app }}`'
-            action: 'Sjekk loggen i <https://logs.adeo.no|Elastic> eller i en terminal med `kubectl logs -l app={{ $labels.app }}`'
+            action: 'Sjekk loggen i <https://grafana.nav.cloud.nais.io|Grafana> eller i en terminal med `kubectl logs -l app={{ $labels.app }}`'
             resolved: 'Applikasjonen `{{ $labels.app }}` logger som normalt'
           labels:
             namespace: amt
@@ -31,7 +31,7 @@ spec:
           annotations:
             title: 'Tjenesten `{{ $labels.service }}` svarer med HTTP 5xx feil'
             summary: 'Det har blitt mange HTTP 5xx feil i det siste fra tjenesten `{{ $labels.service }}`'
-            action: 'Sjekk loggen i <https://logs.adeo.no|Elastic> eller i en terminal med `kubectl logs -l app={{ $labels.service }}`'
+            action: 'Sjekk loggen i <https://grafana.nav.cloud.nais.io|Grafana> eller i en terminal med `kubectl logs -l app={{ $labels.service }}`'
             resolved: 'Tjenesten `{{ $labels.service }}` svarer som normalt'
           labels:
             namespace: amt
@@ -45,7 +45,7 @@ spec:
           annotations:
             title: 'Tjenesten `{{ $labels.service }}` opplever mange HTTP 4xx feil'
             summary: 'Det har blitt returnert mange HTTP 4xx feil i det siste til tjenesten `{{ $labels.service }}`'
-            action: 'Sjekk loggen i <https://logs.adeo.no|Elastic> eller i en terminal med `kubectl logs -l app={{ $labels.service }}`'
+            action: 'Sjekk loggen i <https://grafana.nav.cloud.nais.io|Grafana> eller i en terminal med `kubectl logs -l app={{ $labels.service }}`'
             resolved: 'Tjenesten `{{ $labels.service }}` oppfører seg normalt'
           labels:
             namespace: amt
@@ -54,20 +54,17 @@ spec:
 
         # Sjekk Kafka consumer lag
         - alert: KafkaConsumerLag
-          expr: (100 * sum by (group) (rate(kafka_consumergroup_group_lag{topic=~"amt-.*|arrangor-.*|deltaker.*|nav-.*|tiltakskoordinators-.*|virksomheter-.*|endringsmelding-v1", group=~"amt\\..*", client_id!="unknown"}[3m]))) > 10
+          expr: sum by(group) (kafka_consumergroup_group_lag{topic=~"amt\\..*",group=~"^amt-.*",client_id!="unknown"}) > 10
           for: 5m
           annotations:
             title: 'Konsumenten `{{ $labels.group }}` har treghet i mottak av Kafka-meldinger'
             summary: 'Forsinkelsen ved mottak av Kafka-meldinger øker for konsumenten `{{ $labels.group }}`'
-            action: 'Sjekk <https://logs.adeo.no|Elastic> for logger eller <https://grafana.nav.cloud.nais.io|Grafana> for telemetri.'
+            action: 'Sjekk <https://grafana.nav.cloud.nais.io|Grafana> for logger eller telemetri.'
             resolved: 'Konsumenten `{{ $labels.group }}` oppfører seg normalt'
           labels:
             namespace: amt
             severity: warning
             alert_type: custom
-
-
-
 
     # Alerts for kjøretid. Typ om PODer kjører, resursbruk, e.l.
     - name: amt-runtime-alerts
@@ -79,7 +76,7 @@ spec:
           annotations:
             title: 'Applikasjonen `{{ $labels.app }}` har høy CPU-bruk'
             summary: 'En eller flere av instansene for applikasjonen `{{ $labels.app }}` bruker mer enn 80% av tilgjengelig CPU'
-            action: 'Sjekk loggen i <https://logs.adeo.no|Elastic>, i en terminal med `kubectl logs -l app={{ $labels.app }}` eller <https://console.nav.cloud.nais.io/team/amt|NAIS Console>'
+            action: 'Sjekk loggen i <https://grafana.nav.cloud.nais.io|Grafana>, i en terminal med `kubectl logs -l app={{ $labels.app }}` eller <https://console.nav.cloud.nais.io/team/amt|NAIS Console>'
             resolved: 'Applikasjonen `{{ $labels.app }}` oppfører seg normal'
           labels:
             namespace: amt
@@ -93,7 +90,7 @@ spec:
           annotations:
             title: 'Applikasjonen `{{ $labels.app }}` har høyt minneforbruk'
             summary: 'En eller flere av instansene for applikasjonen `{{ $labels.app }}` bruker mer enn 80% av tilgjengelig minne'
-            action: 'Sjekk loggen i <https://logs.adeo.no|Elastic>, i en terminal med `kubectl logs -l app={{ $labels.app }}` eller i <https://console.nav.cloud.nais.io/team/amt|NAIS Console>'
+            action: 'Sjekk loggen i <https://grafana.nav.cloud.nais.io|Grafana>, i en terminal med `kubectl logs -l app={{ $labels.app }}` eller i <https://console.nav.cloud.nais.io/team/amt|NAIS Console>'
             resolved: 'Applikasjonen `{{ $labels.app }}` oppfører seg normal'
           labels:
             namespace: amt
@@ -107,7 +104,7 @@ spec:
           annotations:
             title: 'Deployment `{{ $labels.deployment }}` har nedetid'
             summary: 'En eller flere av instansene for deployment `{{ $labels.deployment }}` er nede'
-            action: 'Sjekk loggen i <https://logs.adeo.no|Elastic> eller i en terminal med `kubectl logs -l app={{ $labels.deployment }}`'
+            action: 'Sjekk loggen i <https://grafana.nav.cloud.nais.io|Grafana> eller i en terminal med `kubectl logs -l app={{ $labels.deployment }}`'
             resolved: 'Deployment `{{ $labels.deployment }}` kjører som normalt'
           labels:
             namespace: amt
@@ -121,7 +118,7 @@ spec:
           annotations:
             title: 'POD `{{ $labels.container }}` starter ikke'
             summary: 'Det er en feil som gjør at PODen `{{ $labels.container }}` ikke starter.'
-            action: 'Sjekk loggen i <https://logs.adeo.no|Elastic> eller i en terminal med `kubectl logs -l app={{ $labels.container }}`'
+            action: 'Sjekk loggen i <https://grafana.nav.cloud.nais.io|Grafana> eller i en terminal med `kubectl logs -l app={{ $labels.container }}`'
             resolved: 'POD `{{ $labels.container }}` kjører som normalt'
           labels:
             namespace: amt
