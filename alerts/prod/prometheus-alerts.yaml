@@ -7,7 +7,6 @@ metadata:
     team: amt
 spec:
   groups:
-    # Alerts for applikasjoner. Typ feil i logger, HTTP-statuser o.l.
     - name: amt-application-alerts
       rules:
         # Sjekk mengden errors i loggen
@@ -16,8 +15,8 @@ spec:
           for: 5m
           annotations:
             title: 'Applikasjonen `{{ $labels.app }}` logger mye feil'
-            summary: 'Det er blitt logger mye feil i det siste fra applikasjonen `{{ $labels.app }}`'
-            action: 'Sjekk loggen i <https://grafana.nav.cloud.nais.io|Grafana> eller i en terminal med `kubectl logs -l app={{ $labels.app }}`'
+            summary: 'Applikasjonen `{{ $labels.app }}` har hatt en høy andel feil i loggene de siste 5 minuttene.'
+            action: 'Sjekk loggene i <https://grafana.nav.cloud.nais.io|Grafana>, NAIS Console eller med `kubectl logs -l app={{ $labels.app }}`'
             resolved: 'Applikasjonen `{{ $labels.app }}` logger som normalt'
           labels:
             namespace: amt
@@ -30,57 +29,56 @@ spec:
           for: 5m
           annotations:
             title: 'Tjenesten `{{ $labels.service }}` svarer med HTTP 5xx feil'
-            summary: 'Det har blitt mange HTTP 5xx feil i det siste fra tjenesten `{{ $labels.service }}`'
-            action: 'Sjekk loggen i <https://grafana.nav.cloud.nais.io|Grafana> eller i en terminal med `kubectl logs -l app={{ $labels.service }}`'
+            summary: 'Høy andel HTTP 5xx-feil i det siste fra tjenesten `{{ $labels.service }}`'
+            action: 'Sjekk loggene i <https://grafana.nav.cloud.nais.io|Grafana>, NAIS Console eller med `kubectl logs -l app={{ $labels.service }}`'
             resolved: 'Tjenesten `{{ $labels.service }}` svarer som normalt'
           labels:
             namespace: amt
             severity: warning
             alert_type: custom
 
-        # Sjekk HTTP 4xx statuser i ingresser
+        # Sjekk HTTP 4xx statuser i ingresser (alle 4xx, ikke bare 400)
         - alert: HTTP4xxStatus
-          expr: (100 * sum by (service) (rate(nginx_ingress_controller_requests{status=~"400", namespace="amt"}[3m])) / sum by (service) (rate(nginx_ingress_controller_requests{namespace="amt"}[3m]))) > 1
+          expr: (100 * sum by (service) (rate(nginx_ingress_controller_requests{status=~"4\\d\\d", namespace="amt"}[3m])) / sum by (service) (rate(nginx_ingress_controller_requests{namespace="amt"}[3m]))) > 5
           for: 5m
           annotations:
             title: 'Tjenesten `{{ $labels.service }}` opplever mange HTTP 4xx feil'
-            summary: 'Det har blitt returnert mange HTTP 4xx feil i det siste til tjenesten `{{ $labels.service }}`'
-            action: 'Sjekk loggen i <https://grafana.nav.cloud.nais.io|Grafana> eller i en terminal med `kubectl logs -l app={{ $labels.service }}`'
+            summary: 'Høy andel HTTP 4xx-feil i det siste til tjenesten `{{ $labels.service }}`'
+            action: 'Sjekk loggene i <https://grafana.nav.cloud.nais.io|Grafana>, NAIS Console eller med `kubectl logs -l app={{ $labels.service }}`'
             resolved: 'Tjenesten `{{ $labels.service }}` oppfører seg normalt'
           labels:
             namespace: amt
             severity: warning
             alert_type: custom
 
-        # Sjekk Kafka consumer lag
+        # Sjekk Kafka consumer lag per group og topic
         - alert: KafkaConsumerLag
-          expr: sum by(group) (kafka_consumergroup_group_lag{topic=~"amt\\..*",group=~"^amt-.*",client_id!="unknown"}) > 10
+          expr: sum by(group, topic) (kafka_consumergroup_group_lag{topic=~"amt\\..*",group=~"^amt-.*",client_id!="unknown"}) > 10
           for: 5m
           annotations:
             title: 'Konsumenten `{{ $labels.group }}` har treghet i mottak av Kafka-meldinger'
-            summary: 'Forsinkelsen ved mottak av Kafka-meldinger øker for konsumenten `{{ $labels.group }}`'
-            action: 'Sjekk <https://grafana.nav.cloud.nais.io|Grafana> for logger eller telemetri.'
+            summary: 'Forsinkelsen ved mottak av Kafka-meldinger for `{{ $labels.group }}` på topic `{{ $labels.topic }}` overstiger terskelen.'
+            action: 'Sjekk <https://grafana.nav.cloud.nais.io|Grafana> eller NAIS Console for telemetri og logger.'
             resolved: 'Konsumenten `{{ $labels.group }}` oppfører seg normalt'
           labels:
             namespace: amt
             severity: warning
             alert_type: custom
 
-    # Alerts for kjøretid. Typ om PODer kjører, resursbruk, e.l.
     - name: amt-runtime-alerts
       rules:
-        # Sjekk CPU-bruk
+        # Sjekk CPU-bruk (tilpass terskel etter behov)
         - alert: HighCPUUsage
           expr: (100 * sum by(app) (rate(jvm_cpu_time_seconds_total{namespace="amt"}[5m]))) > 80
           for: 5m
           annotations:
             title: 'Applikasjonen `{{ $labels.app }}` har høy CPU-bruk'
-            summary: 'En eller flere av instansene for applikasjonen `{{ $labels.app }}` bruker mer enn 80% av tilgjengelig CPU'
-            action: 'Sjekk loggen i <https://grafana.nav.cloud.nais.io|Grafana>, i en terminal med `kubectl logs -l app={{ $labels.app }}` eller <https://console.nav.cloud.nais.io/team/amt|NAIS Console>'
-            resolved: 'Applikasjonen `{{ $labels.app }}` oppfører seg normal'
+            summary: 'En eller flere instanser av `{{ $labels.app }}` bruker mer enn 80% av CPU de siste 5 minuttene.'
+            action: 'Sjekk <https://grafana.nav.cloud.nais.io|Grafana>, NAIS Console eller med `kubectl logs -l app={{ $labels.app }}`'
+            resolved: 'Applikasjonen `{{ $labels.app }}` bruker nå normal CPU'
           labels:
             namespace: amt
-            severity: danger
+            severity: critical
             alert_type: custom
 
         # Sjekk minneforbruk
@@ -89,23 +87,23 @@ spec:
           for: 5m
           annotations:
             title: 'Applikasjonen `{{ $labels.app }}` har høyt minneforbruk'
-            summary: 'En eller flere av instansene for applikasjonen `{{ $labels.app }}` bruker mer enn 80% av tilgjengelig minne'
-            action: 'Sjekk loggen i <https://grafana.nav.cloud.nais.io|Grafana>, i en terminal med `kubectl logs -l app={{ $labels.app }}` eller i <https://console.nav.cloud.nais.io/team/amt|NAIS Console>'
-            resolved: 'Applikasjonen `{{ $labels.app }}` oppfører seg normal'
+            summary: 'Instanser av `{{ $labels.app }}` bruker mer enn 80% av heap-minne'
+            action: 'Sjekk <https://grafana.nav.cloud.nais.io|Grafana>, NAIS Console eller med `kubectl logs -l app={{ $labels.app }}`'
+            resolved: 'Applikasjonen `{{ $labels.app }}` bruker nå normalt minne'
           labels:
             namespace: amt
-            severity: danger
+            severity: critical
             alert_type: custom
 
-        # Sjekk manglede POD replicas
+        # Sjekk manglende POD replicas (uten offset)
         - alert: InstanceDown
-          expr: sum by (deployment, namespace) (kube_deployment_status_replicas_available{namespace="amt"} offset 5m) == 0
+          expr: sum by (deployment, namespace) (kube_deployment_status_replicas_available{namespace="amt"}) == 0
           for: 5m
           annotations:
             title: 'Deployment `{{ $labels.deployment }}` har nedetid'
-            summary: 'En eller flere av instansene for deployment `{{ $labels.deployment }}` er nede'
-            action: 'Sjekk loggen i <https://grafana.nav.cloud.nais.io|Grafana> eller i en terminal med `kubectl logs -l app={{ $labels.deployment }}`'
-            resolved: 'Deployment `{{ $labels.deployment }}` kjører som normalt'
+            summary: 'Ingen pods er tilgjengelige for deployment `{{ $labels.deployment }}`'
+            action: 'Sjekk <https://grafana.nav.cloud.nais.io|Grafana>, NAIS Console eller med `kubectl logs -l app={{ $labels.deployment }}`'
+            resolved: 'Deployment `{{ $labels.deployment }}` kjører nå som normalt'
           labels:
             namespace: amt
             severity: critical
@@ -117,9 +115,9 @@ spec:
           for: 2m
           annotations:
             title: 'POD `{{ $labels.container }}` starter ikke'
-            summary: 'Det er en feil som gjør at PODen `{{ $labels.container }}` ikke starter.'
-            action: 'Sjekk loggen i <https://grafana.nav.cloud.nais.io|Grafana> eller i en terminal med `kubectl logs -l app={{ $labels.container }}`'
-            resolved: 'POD `{{ $labels.container }}` kjører som normalt'
+            summary: 'POD `{{ $labels.container }}` har restartet mer enn 3 ganger på 5 minutter.'
+            action: 'Sjekk <https://grafana.nav.cloud.nais.io|Grafana>, NAIS Console eller med `kubectl logs -l app={{ $labels.container }}`'
+            resolved: 'POD `{{ $labels.container }}` kjører nå normalt'
           labels:
             namespace: amt
             severity: critical
