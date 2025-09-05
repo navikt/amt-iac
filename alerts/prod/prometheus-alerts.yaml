@@ -25,7 +25,7 @@ spec:
 
         # Sjekk HTTP 5xx statuser i ingresser
         - alert: HTTP5xxStatus
-          expr: (100 * sum by (service) (rate(nginx_ingress_controller_requests{status=~"5\\d\\d", namespace="amt"}[3m])) / sum by (service) (rate(nginx_ingress_controller_requests{namespace="amt"}[3m]))) > 1
+          expr: (100 * sum by (service) (rate(nginx_ingress_controller_requests_total{status=~"5\\d\\d", namespace="amt"}[3m])) / sum by (service) (rate(nginx_ingress_controller_requests_total{namespace="amt"}[3m]))) > 1
           for: 5m
           annotations:
             title: 'Tjenesten `{{ $labels.service }}` svarer med HTTP 5xx feil'
@@ -39,7 +39,7 @@ spec:
 
         # Sjekk HTTP 4xx statuser i ingresser (alle 4xx, ikke bare 400)
         - alert: HTTP4xxStatus
-          expr: (100 * sum by (service) (rate(nginx_ingress_controller_requests{status=~"4\\d\\d", namespace="amt"}[3m])) / sum by (service) (rate(nginx_ingress_controller_requests{namespace="amt"}[3m]))) > 5
+          expr: (100 * sum by (service) (rate(nginx_ingress_controller_requests_total{status=~"4\\d\\d", namespace="amt"}[3m])) / sum by (service) (rate(nginx_ingress_controller_requests_total{namespace="amt"}[3m]))) > 5
           for: 5m
           annotations:
             title: 'Tjenesten `{{ $labels.service }}` opplever mange HTTP 4xx feil'
