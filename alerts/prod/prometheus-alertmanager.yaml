@@ -8,27 +8,24 @@ metadata:
     alertmanagerConfig: amt-alertmanager-config
 spec:
   receivers:
-    - name: amt-custom-slack-receiver
+    # Receiver for firing alerts
+    - name: amt-custom-slack-firing
       slackConfigs:
         - apiURL:
             key: apiUrl
             name: slack-webhook
           channel: "#team_komet_alerts"
           iconEmoji: ":nav-on-fire:"
-          username: "KOMET alertmanager nav-prod-gcp"
-          sendResolved: true
+          username: "KOMET alertmanager"
+          sendResolved: false
           title: |-
-            [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}
+            :nav-on-fire: [{{ .Status | toUpper }}:{{ .Alerts.Firing | len }}] {{ .CommonLabels.alertname }}
           text: >-
             {{ range .Alerts -}}
-              {{ if eq .Status "firing" -}}
-                *Severity:* `{{ .Labels.severity | toUpper }}`{{ "\n" }}
-                *Title:* {{ .Annotations.title }}{{ "\n" }}
-                *Summary:* {{ .Annotations.summary }}{{ "\n" }}
-                *Action:* {{ .Annotations.action }}{{ "\n" }}
-              {{ else -}}
-                *Title:* {{ .Annotations.resolved }}{{ "\n" }}
-              {{- end }}
+              *Severity:* `{{ .Labels.severity | toUpper }}`
+              *Title:* {{ .Annotations.title }}
+              *Summary:* {{ .Annotations.summary }}
+              *Action:* {{ .Annotations.action }}
             {{- end }}
           color: |-
             {{ if eq .Status "firing" -}}
@@ -52,6 +49,25 @@ spec:
             {{ else -}}
                 good
             {{- end }}
+
+    # Receiver for resolved alerts
+    - name: amt-custom-slack-resolved
+      slackConfigs:
+        - apiURL:
+            key: apiUrl
+            name: slack-webhook
+          channel: "#team_komet_alerts"
+          iconEmoji: ":white_check_mark:"
+          username: "KOMET alertmanager"
+          sendResolved: true
+          title: |-
+            :white_check_mark: [RESOLVED] {{ .CommonLabels.alertname }}
+          text: >-
+            {{ range .Alerts -}}
+              *Title:* {{ .Annotations.resolved }}
+            {{- end }}
+          color: good
+
   route:
     groupWait: 5s
     groupInterval: 10s
@@ -61,8 +77,25 @@ spec:
     matchers:
       - name: "namespace"
         value: "amt"
-        matchType: '='
+        matchType: "="
       - name: "alert_type"
         matchType: "="
         value: "custom"
-    receiver: amt-custom-slack-receiver
+    routes:
+      - receiver: amt-custom-slack-firing
+        matchers:
+          - name: "namespace"
+            value: "amt"
+            matchType: "="
+          - name: "alert_type"
+            value: "custom"
+            matchType: "="
+        continue: true
+      - receiver: amt-custom-slack-resolved
+        matchers:
+          - name: "namespace"
+            value: "amt"
+            matchType: "="
+          - name: "alert_type"
+            value: "custom"
+            matchType: "="
