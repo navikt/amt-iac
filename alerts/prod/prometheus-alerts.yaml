@@ -122,3 +122,24 @@ spec:
             namespace: amt
             severity: critical
             alert_type: custom
+
+        # Unik sjekk i amt-arena-acl
+        - alert: Antall meldinger i arena-acl med status FAILED > 0
+          expr: amt_arena_acl_ingest_status{app="amt-arena-acl", status="FAILED"} > 0
+          for: 1m
+          annotations:
+            action: "Sjekk `arena_data` tabellen: `select * from arena_data where ingest_status = 'FAILED';`"
+          labels:
+            namespace: amt
+            severity: critical
+
+        # Unik sjekk i amt-tiltak
+        - alert: Antall meldinger i amt-tiltak med status FAILED > 0
+          expr: amt_tiltak_antall_feilede_kafkameldinger{app="amt-tiltak"} > 0
+          for: 1m
+          annotations:
+            summary: "En eller flere kafkameldinger har ikke blitt prossesert riktig"
+            action: "Sjekk `kafka_consumer_record`-tabellen: `select * from kafka_consumer_record;`"
+          labels:
+            namespace: amt
+            severity: critical
