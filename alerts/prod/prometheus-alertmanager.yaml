@@ -74,6 +74,7 @@ spec:
     repeatInterval: 30m
     groupBy:
       - alertname
+    receiver: amt-custom-slack-receiver
     matchers:
       - name: "namespace"
         value: "amt"
