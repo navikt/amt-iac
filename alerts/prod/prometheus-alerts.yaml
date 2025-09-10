@@ -132,6 +132,7 @@ spec:
           labels:
             namespace: amt
             severity: critical
+            alert_type: custom
 
         # Unik sjekk i amt-tiltak
         - alert: Antall meldinger i amt-tiltak med status FAILED > 0
@@ -143,3 +144,4 @@ spec:
           labels:
             namespace: amt
             severity: critical
+            alert_type: custom

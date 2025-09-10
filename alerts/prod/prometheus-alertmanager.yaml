@@ -76,13 +76,6 @@ spec:
     groupBy:
       - alertname
     receiver: amt-custom-slack-receiver
-    matchers:
-      - name: "namespace"
-        value: "amt"
-        matchType: "="
-      - name: "alert_type"
-        matchType: "="
-        value: "custom"
     routes:
       - receiver: amt-custom-slack-firing
         matchers:
