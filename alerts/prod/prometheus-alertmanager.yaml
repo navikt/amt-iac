@@ -9,18 +9,16 @@ metadata:
 spec:
   receivers:
     - name: amt-custom-slack-receiver
-    # Receiver for firing alerts
-    - name: amt-custom-slack-firing
       slackConfigs:
         - apiURL:
             key: apiUrl
             name: slack-webhook
           channel: "#team_komet_alerts"
-          iconEmoji: ":nav-on-fire:"
+          iconEmoji: '{{ if eq .Status "firing" }}:nav-on-fire:{{ else }}:white_check_mark:{{ end }}'
           username: "KOMET alertmanager"
-          sendResolved: false
+          sendResolved: true
           title: |-
-            :nav-on-fire: [{{ .Status | toUpper }}:{{ .Alerts.Firing | len }}] {{ .CommonLabels.alertname }}
+            {{ if eq .Status "firing" }}:nav-on-fire:{{ else }}:white_check_mark:{{ end }} [{{ .Status | toUpper }}] {{ .CommonLabels.alertname }}
           text: >-
             {{ range .Alerts -}}
               *Severity:* `{{ .Labels.severity | toUpper }}`
@@ -45,29 +43,11 @@ spec:
               {{- else if eq .CommonLabels.severity "info" -}}
                 #8ab4f8
               {{- else -}}
-                .CommonLabels.severity
+                #808080
               {{- end -}}
             {{ else -}}
                 good
             {{- end }}
-
-    # Receiver for resolved alerts
-    - name: amt-custom-slack-resolved
-      slackConfigs:
-        - apiURL:
-            key: apiUrl
-            name: slack-webhook
-          channel: "#team_komet_alerts"
-          iconEmoji: ":white_check_mark:"
-          username: "KOMET alertmanager"
-          sendResolved: true
-          title: |-
-            :white_check_mark: [RESOLVED] {{ .CommonLabels.alertname }}
-          text: >-
-            {{ range .Alerts -}}
-              *Title:* {{ .Annotations.resolved }}
-            {{- end }}
-          color: good
 
   route:
     groupWait: 5s
@@ -76,21 +56,10 @@ spec:
     groupBy:
       - alertname
     receiver: amt-custom-slack-receiver
-    routes:
-      - receiver: amt-custom-slack-firing
-        matchers:
-          - name: "namespace"
-            value: "amt"
-            matchType: "="
-          - name: "alert_type"
-            value: "custom"
-            matchType: "="
-        continue: true
-      - receiver: amt-custom-slack-resolved
-        matchers:
-          - name: "namespace"
-            value: "amt"
-            matchType: "="
-          - name: "alert_type"
-            value: "custom"
-            matchType: "="
+    matchers:
+      - name: "namespace"
+        value: "amt"
+        matchType: "="
+      - name: "alert_type"
+        value: "custom"
+        matchType: "="

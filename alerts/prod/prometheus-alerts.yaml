@@ -12,7 +12,7 @@ spec:
         # Sjekk mengden errors i loggen
         - alert: LogsErrorRate
           expr: (100 * sum by (app, namespace) (rate(log_messages_errors{level="Error", namespace="amt"}[3m])) / sum by (app, namespace) (rate(log_messages_total{namespace="amt"}[3m]))) > 1
-          for: 5m
+          for: 3m
           annotations:
             title: 'Applikasjonen `{{ $labels.app }}` logger mye feil'
             summary: 'Applikasjonen `{{ $labels.app }}` har hatt en høy andel feil i loggene de siste 5 minuttene.'
@@ -26,7 +26,7 @@ spec:
         # Sjekk HTTP 5xx statuser i ingresser
         - alert: HTTP5xxStatus
           expr: (100 * sum by (service) (rate(nginx_ingress_controller_requests_total{status=~"5\\d\\d", namespace="amt"}[3m])) / sum by (service) (rate(nginx_ingress_controller_requests_total{namespace="amt"}[3m]))) > 1
-          for: 5m
+          for: 3m
           annotations:
             title: 'Tjenesten `{{ $labels.service }}` svarer med HTTP 5xx feil'
             summary: 'Høy andel HTTP 5xx-feil i det siste fra tjenesten `{{ $labels.service }}`'
@@ -40,7 +40,7 @@ spec:
         # Sjekk HTTP 4xx statuser i ingresser (alle 4xx, ikke bare 400)
         - alert: HTTP4xxStatus
           expr: (100 * sum by (service) (rate(nginx_ingress_controller_requests_total{status=~"4\\d\\d", namespace="amt"}[3m])) / sum by (service) (rate(nginx_ingress_controller_requests_total{namespace="amt"}[3m]))) > 5
-          for: 5m
+          for: 3m
           annotations:
             title: 'Tjenesten `{{ $labels.service }}` opplever mange HTTP 4xx feil'
             summary: 'Høy andel HTTP 4xx-feil i det siste til tjenesten `{{ $labels.service }}`'
@@ -54,7 +54,7 @@ spec:
         # Sjekk Kafka consumer lag per group og topic
         - alert: KafkaConsumerLag
           expr: sum by(group, topic) (kafka_consumergroup_group_lag{topic=~"amt\\..*",group=~"^amt-.*",client_id!="unknown"}) > 10
-          for: 5m
+          for: 3m
           annotations:
             title: 'Konsumenten `{{ $labels.group }}` har treghet i mottak av Kafka-meldinger'
             summary: 'Forsinkelsen ved mottak av Kafka-meldinger for `{{ $labels.group }}` på topic `{{ $labels.topic }}` overstiger terskelen.'
@@ -70,7 +70,7 @@ spec:
         # Sjekk CPU-bruk (tilpass terskel etter behov)
         - alert: HighCPUUsage
           expr: (100 * sum by(app) (rate(jvm_cpu_time_seconds_total{namespace="amt"}[5m]))) > 80
-          for: 5m
+          for: 3m
           annotations:
             title: 'Applikasjonen `{{ $labels.app }}` har høy CPU-bruk'
             summary: 'En eller flere instanser av `{{ $labels.app }}` bruker mer enn 80% av CPU de siste 5 minuttene.'
@@ -84,7 +84,7 @@ spec:
         # Sjekk minneforbruk
         - alert: HighMemoryUsage
           expr: (100 * sum by (instance) (jvm_memory_used_bytes{namespace="amt", area="heap"})) / sum by (instance) (jvm_memory_max_bytes{namespace="amt", area="heap"}) > 80
-          for: 5m
+          for: 3m
           annotations:
             title: 'Applikasjonen `{{ $labels.app }}` har høyt minneforbruk'
             summary: 'Instanser av `{{ $labels.app }}` bruker mer enn 80% av heap-minne'
@@ -98,7 +98,7 @@ spec:
         # Sjekk manglende POD replicas (uten offset)
         - alert: InstanceDown
           expr: sum by (deployment, namespace) (kube_deployment_status_replicas_available{namespace="amt"}) == 0
-          for: 5m
+          for: 3m
           annotations:
             title: 'Deployment `{{ $labels.deployment }}` har nedetid'
             summary: 'Ingen pods er tilgjengelige for deployment `{{ $labels.deployment }}`'
