@@ -15,7 +15,7 @@ spec:
           for: 3m
           annotations:
             title: 'Applikasjonen `{{ $labels.app }}` logger mye feil'
-            summary: 'Applikasjonen `{{ $labels.app }}` har hatt en høy andel feil i loggene de siste 5 minuttene.'
+            summary: 'Applikasjonen `{{ $labels.app }}` har hatt en høy andel feil i loggene de siste 3 minuttene.'
             action: 'Sjekk loggene i <https://grafana.nav.cloud.nais.io|Grafana>, NAIS Console eller med `kubectl logs -l app={{ $labels.app }}`'
             resolved: 'Applikasjonen `{{ $labels.app }}` logger som normalt'
           labels:
