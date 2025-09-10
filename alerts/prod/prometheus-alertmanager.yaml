@@ -8,6 +8,7 @@ metadata:
     alertmanagerConfig: amt-alertmanager-config
 spec:
   receivers:
+    - name: amt-custom-slack-receiver
     # Receiver for firing alerts
     - name: amt-custom-slack-firing
       slackConfigs:
