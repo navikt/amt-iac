@@ -13,7 +13,7 @@ spec:
         - apiURL:
             key: apiUrl
             name: slack-webhook
-          channel: "#team_komet_alerts"
+          channel: "#team_komet_dev_alerts"
           iconEmoji: '{{ if eq .Status "firing" }}:nav-on-fire:{{ else }}:white_check_mark:{{ end }}'
           username: "KOMET alertmanager dev-gcp"
           sendResolved: true
