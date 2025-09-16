@@ -11,7 +11,7 @@ spec:
       rules:
         # Sjekk mengden errors i loggen
         - alert: LogsErrorRate
-          expr: (100 * sum by (app, namespace) (rate(log_messages_errors{level="Error", namespace="amt"}[3m])) / sum by (app, namespace) (rate(log_messages_total{namespace="amt"}[3m]))) > 1
+          expr: (1000 * sum by (app, namespace) (rate(log_messages_errors{level="Error", namespace="amt"}[3m])) / sum by (app, namespace) (rate(log_messages_total{namespace="amt"}[3m]))) > 1
           for: 3m
           annotations:
             title: 'Applikasjonen `{{ $labels.app }}` logger mye feil'
@@ -25,7 +25,7 @@ spec:
 
         # Sjekk HTTP 5xx statuser i ingresser
         - alert: HTTP5xxStatus
-          expr: (100 * sum by (service) (rate(nginx_ingress_controller_requests_total{status=~"5\\d\\d", namespace="amt"}[3m])) / sum by (service) (rate(nginx_ingress_controller_requests_total{namespace="amt"}[3m]))) > 1
+          expr: (1000 * sum by (service) (rate(nginx_ingress_controller_requests_total{status=~"5\\d\\d", namespace="amt"}[3m])) / sum by (service) (rate(nginx_ingress_controller_requests_total{namespace="amt"}[3m]))) > 1
           for: 3m
           annotations:
             title: 'Tjenesten `{{ $labels.service }}` svarer med HTTP 5xx feil'
@@ -53,7 +53,7 @@ spec:
 
         # Sjekk Kafka consumer lag per group og topic
         - alert: KafkaConsumerLag
-          expr: sum by(group, topic) (kafka_consumergroup_group_lag{topic=~"amt\\..*",group=~"^amt-.*",client_id!="unknown"}) > 10
+          expr: sum by(group, topic) (kafka_consumergroup_group_lag{topic=~"amt\\..*",group=~"^amt-.*",client_id!="unknown"}) > 5
           for: 3m
           annotations:
             title: 'Konsumenten `{{ $labels.group }}` har treghet i mottak av Kafka-meldinger'
@@ -112,7 +112,7 @@ spec:
         # Sjekk POD restart status
         - alert: CrashLoopBackoff
           expr: sum by (container) (increase(kube_pod_container_status_restarts_total{namespace="amt"}[5m])) > 3
-          for: 2m
+          for: 3m
           annotations:
             title: 'POD `{{ $labels.container }}` starter ikke'
             summary: 'POD `{{ $labels.container }}` har restartet mer enn 3 ganger på 5 minutter.'
@@ -128,10 +128,10 @@ spec:
           expr: amt_arena_acl_ingest_status{app="amt-arena-acl", status="FAILED"} > 0
           for: 1m
           annotations:
-            title: 'POD `{{ $labels.container }}` har problemer med å prosessere meldinger'
+            title: 'Appen `{{ $labels.app }}` har problemer med å prosessere meldinger'
             summary: 'En eller flere kafkameldinger har ikke blitt prossesert riktig'
-            action: "Sjekk `arena_data` tabellen i `{{ $labels.app }}`: `select * from arena_data where ingest_status = 'FAILED';`"
-            resolved: 'POD `{{ $labels.container }}` prosesserer meldinger som normalt'
+            action: "Sjekk `arena_data` tabellen i `{{ $labels.app }}` slik: `select * from arena_data where ingest_status = 'FAILED';`"
+            resolved: '`{{ $labels.app }}` prosesserer meldinger som normalt'
           labels:
             namespace: amt
             severity: critical
@@ -142,10 +142,10 @@ spec:
           expr: amt_tiltak_antall_feilede_kafkameldinger{app="amt-tiltak"} > 0
           for: 1m
           annotations:
-            title: 'POD `{{ $labels.container }}` har problemer med å prosessere meldinger'
+            title: 'Appen `{{ $labels.app }}` har problemer med å prosessere meldinger'
             summary: "En eller flere kafkameldinger har ikke blitt prossesert riktig"
-            action: "Sjekk `kafka_consumer_record`-tabellen i `{{ $labels.app }}`: `select * from kafka_consumer_record;`"
-            resolved: 'POD `{{ $labels.container }}` prosesserer meldinger som normalt'
+            action: "Sjekk `kafka_consumer_record`-tabellen i `{{ $labels.app }}` slik: `select * from kafka_consumer_record;`"
+            resolved: '`{{ $labels.app }}` prosesserer meldinger som normalt'
           labels:
             namespace: amt
             severity: critical

@@ -125,13 +125,13 @@ spec:
 
         # Unik sjekk i amt-arena-acl
         - alert: Antall meldinger i arena-acl med status FAILED > 0
-          expr: amt_arena_acl_ingest_status{app="amt-arena-acl", status="FAILED"} > 0
+          expr: amt_arena_acl_ingest_status{app="amt-arena-acl", status="FAILED"} > 5
           for: 1m
           annotations:
-            title: 'POD `{{ $labels.container }}` har problemer med å prosessere meldinger'
+            title: 'Appen `{{ $labels.app }}` har problemer med å prosessere meldinger'
             summary: 'En eller flere kafkameldinger har ikke blitt prossesert riktig'
-            action: "Sjekk `arena_data` tabellen i `{{ $labels.app }}`: `select * from arena_data where ingest_status = 'FAILED';`"
-            resolved: 'POD `{{ $labels.container }}` prosesserer meldinger som normalt'
+            action: "Sjekk `arena_data` tabellen i `{{ $labels.app }}` slik: `select * from arena_data where ingest_status = 'FAILED';`"
+            resolved: '`{{ $labels.app }}` prosesserer meldinger som normalt'
           labels:
             namespace: amt
             severity: critical
@@ -139,13 +139,13 @@ spec:
 
         # Unik sjekk i amt-tiltak
         - alert: Antall meldinger i amt-tiltak med status FAILED > 0
-          expr: amt_tiltak_antall_feilede_kafkameldinger{app="amt-tiltak"} > 0
+          expr: amt_tiltak_antall_feilede_kafkameldinger{app="amt-tiltak"} > 5
           for: 1m
           annotations:
-            title: 'POD `{{ $labels.container }}` har problemer med å prosessere meldinger'
+            title: 'Appen `{{ $labels.app }}` har problemer med å prosessere meldinger'
             summary: "En eller flere kafkameldinger har ikke blitt prossesert riktig"
-            action: "Sjekk `kafka_consumer_record`-tabellen i `{{ $labels.app }}`: `select * from kafka_consumer_record;`"
-            resolved: 'POD `{{ $labels.container }}` prosesserer meldinger som normalt'
+            action: "Sjekk `kafka_consumer_record`-tabellen i `{{ $labels.app }}` slik: `select * from kafka_consumer_record;`"
+            resolved: '`{{ $labels.app }}` prosesserer meldinger som normalt'
           labels:
             namespace: amt
             severity: critical
