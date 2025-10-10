@@ -176,6 +176,12 @@ spec:
                "location": "AIVEN",
                "keyDeserializerType": "STRING",
                "valueDeserializerType": "STRING"
+            },
+            {
+               "name": "amt.arena-enkeltplass-deltaker-v1",
+               "location": "AIVEN",
+               "keyDeserializerType": "STRING",
+               "valueDeserializerType": "STRING"
             }
           ]
         }
