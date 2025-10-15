@@ -17,7 +17,7 @@ spec:
     replication: 2
   acl:
     - team: amt
-      application: amt-tiltak
+      application: amt-arena-acl
       access: write
     - team: amt
       application: amt-kafka-manager
