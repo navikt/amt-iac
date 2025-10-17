@@ -53,7 +53,7 @@ spec:
 
         # Sjekk Kafka consumer lag per group og topic
         - alert: KafkaConsumerLag
-          expr: sum by(group, topic) (kafka_consumergroup_group_lag{topic=~"amt\\..*",group=~"^amt-.*",client_id!="unknown"}) > 5
+          expr: sum by(group, topic) (kafka_consumergroup_group_lag{group=~"^amt-.*",client_id!="unknown"}) > 5
           for: 3m
           annotations:
             title: 'Konsumenten `{{ $labels.group }}` har treghet i mottak av Kafka-meldinger'
