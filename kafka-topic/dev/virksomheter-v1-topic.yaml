@@ -31,6 +31,9 @@ spec:
     - team: team-mulighetsrommet
       application: mulighetsrommet-api
       access: read
+    - team: team-mulighetsrommet
+      application: tiltakshistorikk
+      access: read
     - team: amt
       application: amt-arrangor
       access: read
