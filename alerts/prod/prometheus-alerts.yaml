@@ -25,11 +25,11 @@ spec:
 
         # Sjekk antallet errors over tid
         - alert: LogsErrorCount
-          expr: sum by (app, namespace) (rate(log_messages_errors{level="Error", namespace="amt"}[5m])) > 5
-          for: 5m
+          expr: sum by (app, namespace) (rate(log_messages_errors{level="Error", namespace="amt"}[10m])) > 5
+          for: 10m
           annotations:
             title: 'Applikasjonen `{{ $labels.app }}` logger mange feil'
-            summary: 'Applikasjonen `{{ $labels.app }}` har hatt mer enn 5 feil i loggene de siste 5 minuttene.'
+            summary: 'Applikasjonen `{{ $labels.app }}` har hatt mer enn 5 feil i loggene de siste 10 minuttene.'
             action: 'Sjekk loggene i <https://grafana.nav.cloud.nais.io|Grafana>, NAIS Console eller med `kubectl logs -l app={{ $labels.app }}`'
             resolved: 'Applikasjonen `{{ $labels.app }}` logger som normalt'
           labels:
@@ -68,7 +68,7 @@ spec:
         # Sjekk Kafka consumer lag per group og topic
         - alert: KafkaConsumerLag
           expr: sum by(group, topic) (kafka_consumergroup_group_lag{group=~"^amt-.*",client_id!="unknown"}) > 5
-          for: 3m
+          for: 5m
           annotations:
             title: 'Konsumenten `{{ $labels.group }}` har treghet i mottak av Kafka-meldinger'
             summary: 'Forsinkelsen ved mottak av Kafka-meldinger for `{{ $labels.group }}` på topic `{{ $labels.topic }}` overstiger terskelen.'
@@ -84,7 +84,7 @@ spec:
         # Sjekk CPU-bruk (tilpass terskel etter behov)
         - alert: HighCPUUsage
           expr: (100 * sum by(app) (rate(jvm_cpu_time_seconds_total{namespace="amt"}[5m]))) > 80
-          for: 3m
+          for: 5m
           annotations:
             title: 'Applikasjonen `{{ $labels.app }}` har høy CPU-bruk'
             summary: 'En eller flere instanser av `{{ $labels.app }}` bruker mer enn 80% av CPU de siste 5 minuttene.'
@@ -127,7 +127,7 @@ spec:
         # Sjekk POD restart status
         - alert: CrashLoopBackoff
           expr: sum by (container) (increase(kube_pod_container_status_restarts_total{namespace="amt"}[5m])) > 3
-          for: 3m
+          for: 5m
           annotations:
             title: 'POD `{{ $labels.container }}` starter ikke'
             summary: 'POD `{{ $labels.container }}` har restartet mer enn 3 ganger på 5 minutter.'
