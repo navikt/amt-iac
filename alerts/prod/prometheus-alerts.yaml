@@ -97,14 +97,13 @@ spec:
 
         # Sjekk minneforbruk
         - alert: HighMemoryUsage
-          expr: (100 * sum by (app) (jvm_memory_used_bytes{namespace="amt", area="heap"})) / sum by (app) (jvm_memory_max_bytes{namespace="amt", area="heap"}) > 80
-
+          expr: (100 * sum by (app, instance) (jvm_memory_used_bytes{namespace="amt", area="heap"})) / sum by (app, instance) (jvm_memory_max_bytes{namespace="amt", area="heap"}) > 80
           for: 3m
           annotations:
-            title: 'Applikasjonen `{{ $labels.app }}` har høyt minneforbruk'
-            summary: 'Instanser av `{{ $labels.app }}` bruker mer enn 80% av heap-minne'
-            action: 'Sjekk <https://grafana.nav.cloud.nais.io|Grafana>, NAIS Console eller med `kubectl logs -l app={{ $labels.app }}`'
-            resolved: 'Applikasjonen `{{ $labels.app }}` bruker nå normalt minne'
+            title: 'Applikasjonen `{{ $labels.app }}` har høyt minneforbruk for pod `{{ $labels.instance }}`'
+            summary: 'Pod `{{ $labels.instance }}` i `{{ $labels.app }}` bruker mer enn 80% av heap-minne'
+            action: 'Sjekk Grafana (<https://grafana.nav.cloud.nais.io>), NAIS Console, eller hent logger med `kubectl logs {{ $labels.instance }}`.'
+            resolved: 'Pod `{{ $labels.instance }}` i `{{ $labels.app }}` har normalt minneforbruk'
           labels:
             namespace: amt
             severity: critical
