@@ -41,6 +41,8 @@ spec:
   kafka:
     pool: nav-dev
   env:
+    - name: JDK_JAVA_OPTIONS
+      value: "-XX:MaxRAMPercentage=70.0"
     - name: APP_CONFIG_JSON
       value: >
         {
