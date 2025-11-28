@@ -184,6 +184,12 @@ spec:
                "location": "AIVEN",
                "keyDeserializerType": "STRING",
                "valueDeserializerType": "STRING"
+            },
+            {
+               "name": "dab.aktivitetskort-feil-v1",
+               "location": "AIVEN",
+               "keyDeserializerType": "STRING",
+               "valueDeserializerType": "STRING"
             }
           ]
         }
