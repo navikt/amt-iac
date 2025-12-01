@@ -97,11 +97,11 @@ spec:
 
         # Sjekk minneforbruk
         - alert: HighMemoryUsage
-          expr: (100 * sum by (app, pod) (jvm_memory_used_bytes{namespace="amt", area="heap"})) / sum by (app, pod) (jvm_memory_max_bytes{namespace="amt", area="heap"}) > 50
+          expr: (100 * sum by (app, pod) (jvm_memory_used_bytes{namespace="amt", area="heap"})) / sum by (app, pod) (jvm_memory_max_bytes{namespace="amt", area="heap"}) > 40
           for: 3m
           annotations:
             title: 'Applikasjonen `{{ $labels.app }}` har høyt minneforbruk for pod `{{ $labels.pod }}`'
-            summary: 'Pod `{{ $labels.pod }}` i `{{ $labels.app }}` bruker mer enn 50% av heap-minne'
+            summary: 'Pod `{{ $labels.pod }}` i `{{ $labels.app }}` bruker mer enn 40% av heap-minne'
             action: 'Sjekk Grafana (<https://grafana.nav.cloud.nais.io>), NAIS Console, eller hent logger med `kubectl logs {{ $labels.pod }}`.'
             resolved: 'Pod `{{ $labels.pod }}` i `{{ $labels.app }}` har normalt minneforbruk'
           labels:
