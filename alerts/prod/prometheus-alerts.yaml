@@ -25,8 +25,8 @@ spec:
 
         # Sjekk antallet errors over tid
         - alert: LogsErrorCount
-          expr: sum by (app, namespace) (rate(log_messages_errors{level="Error", namespace="amt"}[10m])) > 5
-          for: 10m
+          expr: sum by (app, namespace) (increase(log_messages_errors{namespace="amt"}[10m])) > 5
+          for: 1m
           annotations:
             title: 'Applikasjonen `{{ $labels.app }}` logger mange feil'
             summary: 'Applikasjonen `{{ $labels.app }}` har hatt mer enn 5 feil i loggene de siste 10 minuttene.'
@@ -67,7 +67,21 @@ spec:
 
         # Sjekk Kafka consumer lag per group og topic
         - alert: KafkaConsumerLag
-          expr: sum by(group, topic) (kafka_consumergroup_group_lag{group=~"^amt-.*",client_id!="unknown"}) > 5
+          expr: sum by(group, topic) (kafka_consumergroup_group_lag{group=~"^amt-.*",group!="amt-distribusjon-consumer",client_id!="unknown"}) > 10
+          for: 5m
+          annotations:
+            title: 'Konsumenten `{{ $labels.group }}` har treghet i mottak av Kafka-meldinger'
+            summary: 'Forsinkelsen ved mottak av Kafka-meldinger for `{{ $labels.group }}` på topic `{{ $labels.topic }}` overstiger terskelen.'
+            action: 'Sjekk <https://grafana.nav.cloud.nais.io|Grafana> eller NAIS Console for telemetri og logger.'
+            resolved: 'Konsumenten `{{ $labels.group }}` oppfører seg normalt'
+          labels:
+            namespace: amt
+            severity: warning
+            alert_type: custom
+
+        # Skiller ut denne alerten for å forhindre alarmer pga. spikes fra min-side varsel topic
+        - alert: AmtDistribusjonConsumerLag
+          expr: sum by(group, topic) (kafka_consumergroup_group_lag{group="amt-distribusjon-consumer",client_id!="unknown"}) > 40
           for: 5m
           annotations:
             title: 'Konsumenten `{{ $labels.group }}` har treghet i mottak av Kafka-meldinger'
