@@ -26,7 +26,7 @@ spec:
         # Sjekk antallet errors over tid
         - alert: LogsErrorCount
           expr: sum by (app, namespace) (increase(log_messages_errors{namespace="amt"}[10m])) > 10
-          for: 5m
+          for: 1m
           annotations:
             title: 'Applikasjonen `{{ $labels.app }}` logger mange feil'
             summary: 'Applikasjonen `{{ $labels.app }}` har hatt mer enn 10 feil i loggene de siste 10 minuttene.'
