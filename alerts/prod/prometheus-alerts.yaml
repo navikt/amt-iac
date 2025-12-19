@@ -65,13 +65,13 @@ spec:
             severity: warning
             alert_type: custom
 
-        # Sjekk Kafka consumer lag per group og topic
+        # Sjekk Kafka consumer lag per group
         - alert: KafkaConsumerLag
-          expr: sum by(group, topic) (kafka_consumergroup_group_lag{group=~"^amt-.*",group!="amt-distribusjon-consumer",client_id!="unknown"}) > 10
+          expr: sum by(group, topic) (kafka_consumergroup_group_lag{group=~"^amt-.*",topic!="min-side.aapen-varsel-hendelse-v1",client_id!="unknown"}) > 10
           for: 5m
           annotations:
             title: 'Konsumenten `{{ $labels.group }}` har treghet i mottak av Kafka-meldinger'
-            summary: 'Forsinkelsen ved mottak av Kafka-meldinger for `{{ $labels.group }}` på topic `{{ $labels.topic }}` overstiger terskelen.'
+            summary: 'Forsinkelsen ved mottak av Kafka-meldinger for `{{ $labels.group }}` på topic `{{ $labels.topic }}` overstiger terskelen på over 10 meldinger i 5 minutter.'
             action: 'Sjekk <https://grafana.nav.cloud.nais.io|Grafana> eller NAIS Console for telemetri og logger.'
             resolved: 'Konsumenten `{{ $labels.group }}` oppfører seg normalt'
           labels:
@@ -79,13 +79,13 @@ spec:
             severity: warning
             alert_type: custom
 
-        # Skiller ut denne alerten for å forhindre alarmer pga. spikes fra min-side varsel topic
-        - alert: AmtDistribusjonConsumerLag
-          expr: sum by(group, topic) (kafka_consumergroup_group_lag{group="amt-distribusjon-consumer",client_id!="unknown"}) > 40
+        # Skiller ut denne alerten for å forhindre alarmer pga. consumer lag spikes i min-side varsel topic
+        - alert: AmtDistribusjonMinSideVarslerConsumerLag
+          expr: sum by(group, topic) (kafka_consumergroup_group_lag{topic="min-side.aapen-varsel-hendelse-v1",group="amt-distribusjon-consumer",client_id!="unknown"}) > 100
           for: 5m
           annotations:
             title: 'Konsumenten `{{ $labels.group }}` har treghet i mottak av Kafka-meldinger'
-            summary: 'Forsinkelsen ved mottak av Kafka-meldinger for `{{ $labels.group }}` på topic `{{ $labels.topic }}` overstiger terskelen.'
+            summary: 'Forsinkelsen ved mottak av Kafka-meldinger for `{{ $labels.group }}` på topic `{{ $labels.topic }}` overstiger terskelen på 100 meldinger i lag.'
             action: 'Sjekk <https://grafana.nav.cloud.nais.io|Grafana> eller NAIS Console for telemetri og logger.'
             resolved: 'Konsumenten `{{ $labels.group }}` oppfører seg normalt'
           labels:
