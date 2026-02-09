@@ -60,6 +60,12 @@ spec:
               "valueDeserializerType": "STRING"
             },
             {
+              "name": "amt.deltaker-ekstern-v1",
+              "location": "AIVEN",
+              "keyDeserializerType": "STRING",
+              "valueDeserializerType": "STRING"
+            },
+            {
                "name": "teamarenanais.aapen-arena-tiltakdeltakerendret-v1-p",
                "location": "AIVEN",
                "keyDeserializerType": "STRING",
