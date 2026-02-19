@@ -48,6 +48,12 @@ spec:
         {
           "topics": [
             {
+              "name": "nom.skjermede-personer-status-v1",
+              "location": "AIVEN",
+              "keyDeserializerType": "STRING",
+              "valueDeserializerType": "STRING"
+            },
+            {
               "name": "teamarenanais.aapen-arena-tiltakdeltakerendret-v1-q2",
               "location": "AIVEN",
               "keyDeserializerType": "STRING",
