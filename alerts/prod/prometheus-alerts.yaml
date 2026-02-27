@@ -154,13 +154,13 @@ spec:
 
         # Sjekk POD restart status
         - alert: CrashLoopBackoff
-          expr: sum by (container) (increase(kube_pod_container_status_restarts_total{namespace="amt"}[5m])) > 3
+          expr: sum by (pod) (increase(kube_pod_container_status_restarts_total{namespace="amt"}[5m])) > 3
           for: 5m
           annotations:
-            title: 'POD `{{ $labels.container }}` starter ikke'
-            summary: 'POD `{{ $labels.container }}` har restartet mer enn 3 ganger på 5 minutter.'
-            action: 'Sjekk <https://grafana.nav.cloud.nais.io|Grafana>, NAIS Console eller med `kubectl logs -l app={{ $labels.container }}`'
-            resolved: 'POD `{{ $labels.container }}` kjører nå normalt'
+            title: 'POD `{{ $labels.pod }}` starter ikke'
+            summary: 'POD `{{ $labels.pod }}` har restartet mer enn 3 ganger på 5 minutter.'
+            action: 'Sjekk <https://grafana.nav.cloud.nais.io|Grafana>, NAIS Console eller med `kubectl logs -l app={{ $labels.pod }}`'
+            resolved: 'POD `{{ $labels.pod }}` kjører nå normalt'
           labels:
             namespace: amt
             severity: critical
